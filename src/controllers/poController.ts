@@ -2,19 +2,21 @@ import { Request, Response } from 'express';
 import PurchaseOrder from '../models/purchaseOrder';  // Correct import of the model
 import { generatePOPdf } from '../utils/pdfGenerator';
 import pdfMake from 'pdfmake';
+const path = require('path');
 
 // Create a new Purchase Order and generate PDF
 export const createPO = async (req: Request, res: Response) => {
   const { poNumber, description, totalAmount } = req.body;
   try {
     const po = await PurchaseOrder.create({ poNumber, description, totalAmount });
+    const fontPath = path.join(__dirname, 'roboto.regular.ttf');
 
     // Generate PDF using purchase order data
     const documentDefinition = generatePOPdf(po);
 
     var fonts = {
       Roboto: {
-        normal: 'D:\\NodejsProjects\\NodejsTraining\\react-node-express-ts-backend\\src\\controllers\\roboto.regular.ttf',
+        normal: fontPath,
       }
     };
     var printer = new pdfMake(fonts);
