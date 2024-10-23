@@ -12,14 +12,29 @@ export const createPO = async (req: Request, res: Response) => {
     // Generate PDF using purchase order data
     const documentDefinition = generatePOPdf(po);
 
-    const pdfDoc = pdfMake.createPdf(documentDefinition);
-    pdfDoc.getBase64((data: string) => {
-      res.setHeader('Content-Disposition', 'attachment; filename="purchase_order.pdf"');
-      res.setHeader('Content-Type', 'application/pdf');
-      res.send(Buffer.from(data, 'base64'));
-    });
-  } catch (error) {
-    res.status(500).json({ error: 'Error creating PO' });
+    var fonts = {
+      Roboto: {
+        normal: 'D:\\NodejsProjects\\NodejsTraining\\react-node-express-ts-backend\\src\\controllers\\roboto.regular.ttf',
+      }
+    };
+    var printer = new pdfMake(fonts);
+
+    const pdfDoc = printer.createPdfKitDocument(documentDefinition);
+    
+    res.setHeader('Content-Disposition', `attachment; filename="purchase_order.pdf_${poNumber}"`);
+    res.setHeader('Content-Type', 'application/pdf');
+
+
+    pdfDoc.pipe(res);
+    pdfDoc.end();
+  }  catch (error) {
+    console.error(error); // Log the error for debugging
+    
+    if (error instanceof Error) {
+      res.status(500).json({ error: 'Error creating PO', details: error.message });
+    } else {
+      res.status(500).json({ error: 'Error creating PO', details: 'An unknown error occurred.' });
+    }
   }
 };
 
