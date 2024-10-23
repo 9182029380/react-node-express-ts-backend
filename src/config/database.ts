@@ -4,7 +4,7 @@ import { Sequelize } from 'sequelize';
 const sequelize = new Sequelize(
   'purchase_orders_db',   // Database name
   'root',                 // MySQL user
-  'root',          // MySQL password
+  'pass@word1',          // MySQL password
   {
     host: 'localhost',    // MySQL host
     port: 3306,           // MySQL port (default is 3306, change if needed)
