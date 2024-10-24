@@ -1,16 +1,14 @@
 import { Sequelize } from 'sequelize';
 
-// Hard-coded database configuration for MySQL connection
 const sequelize = new Sequelize(
-  'purchase_orders_db',   // Database name
-  'root',                 // MySQL user
-  'root',          // MySQL password
+  process.env.DB_NAME || 'purchase_orders_db',   // Database name
+  process.env.DB_USER || 'root',                 // MySQL user
+  process.env.DB_PASSWORD || 'root',             // MySQL password
   {
-    host: 'localhost',    // MySQL host
-    port: 3306,           // MySQL port (default is 3306, change if needed)
-    dialect: 'mysql',     // Database dialect
+    host: process.env.DB_HOST || 'localhost',    // MySQL host
+               // MySQL port
+    dialect: 'mysql',                            // Database dialect
   }
 );
 
 export default sequelize;
-
